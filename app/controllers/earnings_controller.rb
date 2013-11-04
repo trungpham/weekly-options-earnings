@@ -67,7 +67,7 @@ class EarningsController < ApplicationController
     earning_dates = Rails.cache.fetch('earning_dates', expires_in: 24.hours) do
       current_date = Date.today
       stocks_and_date = {}
-      (0..5).each do |i|
+      (0..7).each do |i|
         date_value = current_date.strftime('%m-%d-%Y')
         doc = Nokogiri::HTML(open(EARNINGS_CALENDAR_URL.sub('#{date}', current_date.strftime('%Y%m%d'))))
         doc.css('tr td a[href^="http://finance.yahoo.com/q?s="]').each do |node|
