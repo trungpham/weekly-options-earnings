@@ -1,0 +1,33 @@
+<table class="table table-striped sortable">
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Company</th>
+            <th>Industry</th>
+            <th data-dateformat="MM-DD-YYY">Earning date</th>
+            <th>Market Cap</th>
+            <th>P/E</th>
+            <th>Price</th>
+            <th>Change</th>
+            <th>Volume</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <% @stocks.each do |symbol, stock| %>
+            <tr>
+                <td><%= symbol %></td>
+                <td><%= stock[:company] %></td>
+                <td><%= stock[:industry] %></td>
+                <td><%= stock[:er_date] %></td>
+                <td><%= stock[:market_cap].to_i/1000 %></td>
+                <td><%= stock[:pe] %></td>
+                <td><%= stock[:price] %></td>
+                <td><%= stock[:change] %></td>
+                <td><%= stock[:volume] %></td>
+            </tr>
+        <% end %>
+
+    </tbody>
+
+</table>
