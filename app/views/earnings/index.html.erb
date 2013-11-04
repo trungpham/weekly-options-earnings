@@ -4,7 +4,7 @@
             <th>Symbol</th>
             <th>Company</th>
             <th>Industry</th>
-            <th data-dateformat="MM-DD-YYY">Earning date</th>
+            <th data-dateformat="MM-DD-YYY" data-defaultsort="asc">Earning date</th>
             <th>Market Cap</th>
             <th>P/E</th>
             <th>Price</th>
@@ -16,7 +16,7 @@
 
         <% @stocks.each do |symbol, stock| %>
             <tr>
-                <td><%= symbol %></td>
+                <td><a href="http://finance.yahoo.com/q/op?s=<%= symbol %>"><%= symbol %></a></td>
                 <td><%= stock[:company] %></td>
                 <td><%= stock[:industry] %></td>
                 <td><%= stock[:er_date] %></td>
