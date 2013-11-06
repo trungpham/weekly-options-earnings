@@ -5,6 +5,7 @@
             <th>Company</th>
             <th>Industry</th>
             <th data-dateformat="MM-DD-YYY" data-defaultsort="asc">Earning date</th>
+            <th>Time</th>
             <th>Market Cap</th>
             <th>P/E</th>
             <th>Price</th>
@@ -20,6 +21,7 @@
                 <td><%= stock[:company] %></td>
                 <td><%= stock[:industry] %></td>
                 <td><%= stock[:er_date] %></td>
+                <td><%= stock[:er_time] %></td>
                 <td><%= stock[:market_cap].to_i/1000 %></td>
                 <td><%= stock[:pe] %></td>
                 <td><%= stock[:price] %></td>
@@ -31,3 +33,7 @@
     </tbody>
 
 </table>
+
+<div class="text-center">
+    <a href="<%= @link_url %>">More details</a>
+</div>

@@ -7,7 +7,7 @@ class EarningsController < ApplicationController
   EARNINGS_CALENDAR_URL = 'http://biz.yahoo.com/research/earncal/#{date}.html' #"http://biz.yahoo.com/research/earncal/20131104.html"
   WEEKLY_OPTIONS_URL = "http://www.cboe.com/publish/weelkysmf/weeklysmf.xls"
   UPCOMING_EARNINGS_URL = "http://finviz.com/export.ashx?v=111&f=cap_largeover,earningsdate_nextdays5,sh_avgvol_o1000,sh_opt_option,sh_price_o30&ft=4"
-
+  FINVIZ_URL = 'http://finviz.com/screener.ashx?v=341&f=earningsdate_nextdays5&ft=4&t=#{stocks}&o=earningsdate'
   def index
 
     stocks_with_weekly = Rails.cache.fetch('weekly_options', expires_in: 5.minutes) do
@@ -16,7 +16,7 @@ class EarningsController < ApplicationController
       result = []
       (weekly_options_ss.first_row.to_i..weekly_options_ss.last_row.to_i).each do |row|
         if (weekly_options_ss.cell(row, 'D') == 'Equity' && weekly_options_ss.cell(row, 'E') == lastest_list_date)
-          result << weekly_options_ss.cell(row, 'A')
+          result << weekly_options_ss.cell(row, 'A').strip
         end
       end
 
@@ -36,6 +36,7 @@ class EarningsController < ApplicationController
     end
 
     @stocks = add_earning_date(get_stocks_with_weekly_and_earnings(stocks_with_weekly, stocks_with_upcoming_earnings))
+    @link_url = FINVIZ_URL.sub('#{stocks}', stocks_with_weekly.join(','))
   end
 
   private
@@ -71,7 +72,7 @@ class EarningsController < ApplicationController
         date_value = current_date.strftime('%m-%d-%Y')
         doc = Nokogiri::HTML(open(EARNINGS_CALENDAR_URL.sub('#{date}', current_date.strftime('%Y%m%d'))))
         doc.css('tr td a[href^="http://finance.yahoo.com/q?s="]').each do |node|
-          stocks_and_date[node.text] = date_value
+          stocks_and_date[node.text] = {:date => date_value, :time => node.parent.next_sibling.next_sibling.text}
         end
         current_date = current_date.next_day
       end
@@ -79,7 +80,8 @@ class EarningsController < ApplicationController
     end
 
     stocks.each do |k, v|
-      v[:er_date] = earning_dates[k]
+      v[:er_date] = earning_dates[k][:date]
+      v[:er_time] = earning_dates[k][:time]
     end
     stocks
   end
