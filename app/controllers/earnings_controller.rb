@@ -24,14 +24,14 @@ class EarningsController < ApplicationController
     end
 
     stocks_with_upcoming_earnings = Rails.cache.fetch('upcoming_earnings', expires_in: 5.minutes) do
-
+      result = nil
       open(UPCOMING_EARNINGS_URL) do |file|
 
         csv = CSV.new(file.string, :headers => true, :header_converters => :symbol)
         result = csv.to_a.map {|row| row.to_hash }
 
       end
-
+      result
 
     end
 
